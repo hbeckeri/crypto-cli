@@ -10,14 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "bignumber.js": "6.0.0",
-    "bit_mex_api": "1.2.1",
     "ccxt": "1.14.32",
     "command-line-args": "5.0.2",
     "command-line-usage": "4.1.0",
     "dotenv": "5.0.0",
     "gdax": "0.5.1",
     "moment": "2.22.1",
-    "prompt": "1.0.0",
     "prompt-async": "0.9.9",
     "uuid": "3.2.1"
   }
