@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+require('dotenv').config();
+
 const commandLineArgs = require('command-line-args');
 const getUsage = require('command-line-usage');
 const _ = require('lodash');
@@ -8,8 +10,8 @@ const moment = require('moment');
 const schema = [
 	{ name: 'command', defaultOption: true },
 	{ name: 'price', alias: 'p', type: String },
-	{ name: 'exchange', alias: 'e', type: String, defaultValue: 'XBTUSD-BTC' },
-	{ name: 'ammount', alias: 'a', type: String },
+	{ name: 'exchange', alias: 'e', type: String, defaultValue: 'gdax.BTC-USD' },
+	{ name: 'amount', alias: 'a', type: String },
 	{ name: 'address', type: String },
 	{ name: 'order', type: String },
 	{ name: 'risk', alias: 'l', type: String, defaultValue: 0.05 },
@@ -97,9 +99,9 @@ const usageSchema = [
 				description: 'The exchange to use.'
 			},
 			{
-				name: 'ammount',
-				typeLabel: '[underline]{ammount}',
-				description: 'The ammount to buy/sell.'
+				name: 'amount',
+				typeLabel: '[underline]{amount}',
+				description: 'The amount to buy/sell.'
 			},
 			{
 				name: 'risk',
@@ -136,11 +138,12 @@ if (args.help === null) {
 }
 
 const exchange = {
-	'ETH-USD': require('./lib/exchanges/gdax/eth-usd'),
-	'BTC-USD': require('./lib/exchanges/gdax/btc-usd'),
-	'LTC-USD': require('./lib/exchanges/gdax/ltc-usd'),
-	'BCH-USD': require('./lib/exchanges/gdax/bch-usd'),
-	'XBTUSD-BTC': require('./lib/exchanges/bitmex/xbt-usd')
+	'ETH': require('./lib/wallets/ethereum'),
+	'gdax.ETH-USD': require('./lib/exchanges/gdax/eth-usd'),
+	'gdax.BTC-USD': require('./lib/exchanges/gdax/btc-usd'),
+	'gdax.LTC-USD': require('./lib/exchanges/gdax/ltc-usd'),
+	'gdax.BCH-USD': require('./lib/exchanges/gdax/bch-usd'),
+	'bitmex.XBTUSD-BTC': require('./lib/exchanges/bitmex/xbt-usd')
 }[args.exchange];
 
 const command = {
@@ -171,19 +174,19 @@ if (command) {
 }
 
 async function buy() {
-	const response = await exchange.buy(args.ammount, args.price);
+	const response = await exchange.buy(args.amount, args.price);
 
 	console.log(response);
 }
 
 async function sell() {
-	const response = await exchange.sell(args.ammount, args.price);
+	const response = await exchange.sell(args.amount, args.price);
 
 	console.log(response);
 }
 
 async function stopMarket() {
-	const response = await exchange.stopMarket(args.ammount, args.price);
+	const response = await exchange.stopMarket(args.amount, args.price);
 
 	console.log(response);
 }
@@ -207,6 +210,12 @@ async function ask() {
 }
 
 async function balance() {
+	if (exchange.name.includes('Wallet')) {
+		const balance = await exchange.walletBalance();
+
+		return console.log({ [exchange.symbol]: balance });
+	}
+
 	const buyBalance = await exchange.buyBalance();
 	const sellBalance = await exchange.sellBalance();
 
@@ -217,13 +226,13 @@ async function balance() {
 }
 
 async function deposit() {
-	const response = await exchange.deposit(args.ammount);
+	const response = await exchange.deposit(args.amount);
 
 	console.log(response);
 }
 
 async function withdraw() {
-	const response = await exchange.withdraw(args.ammount, args.address);
+	const response = await exchange.withdraw(args.amount, args.address);
 
 	console.log(response);
 }
@@ -235,13 +244,13 @@ async function depositAddress() {
 }
 
 async function autoLong() {
-	const response = await exchange.autoLong(args.price, args.ammount, args.risk, args.reward);
+	const response = await exchange.autoLong(args.price, args.amount, args.risk, args.reward);
 
 	console.log(response);
 }
 
 async function autoShort() {
-	const response = await exchange.autoShort(args.price, args.ammount, args.risk, args.reward);
+	const response = await exchange.autoShort(args.price, args.amount, args.risk, args.reward);
 
 	console.log(response);
 }
