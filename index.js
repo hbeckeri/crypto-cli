@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 
 const commandLineArgs = require('command-line-args');
 const getUsage = require('command-line-usage');
-const _ = require('lodash');
-const moment = require('moment');
 
 const schema = [
 	{ name: 'command', defaultOption: true },
@@ -14,14 +12,19 @@ const schema = [
 	{ name: 'amount', alias: 'a', type: String },
 	{ name: 'address', type: String },
 	{ name: 'order', type: String },
-	{ name: 'risk', alias: 'l', type: String, defaultValue: 0.05 },
-	{ name: 'reward', alias: 'g', type: String, defaultValue: 0.4 },
-	{ name: 'help', alias: 'h', type: String }
+	{ name: 'risk', type: String, defaultValue: 0.05 },
+	{ name: 'reward', type: String, defaultValue: 0.4 },
+	{ name: 'help', alias: 'h', type: String },
+	{ name: 'contract', type: String },
+	{ name: 'abi', type: String },
+	{ name: 'bytecode', type: String },
+	{ name: 'gasLimit', type: Number, defaultValue: 5000000 },
+	{ name: 'gasPrice', type: Number, defaultValue: 1000000000 }
 ];
 
 const usageSchema = [
 	{
-		header: 'Harry\'s Crypto CLI',
+		header: "Harry's Crypto CLI",
 		content: 'CLI tool for crypto'
 	},
 	{
@@ -82,6 +85,14 @@ const usageSchema = [
 			{
 				name: '[bold]{autoShort}',
 				label: 'Go short at a set price protected by stops'
+			},
+			{
+				name: '[bold]{compile}',
+				label: 'Compile an ethereum smart contract'
+			},
+			{
+				name: '[bold]{deploy}',
+				label: 'Deploy an ethereum smart contract'
 			}
 		]
 	},
@@ -136,172 +147,37 @@ const args = commandLineArgs(schema);
 if (args.help === null) {
 	usage();
 }
-
-const exchange = {
-	'ETH': require('./lib/wallets/ethereum'),
-	'gdax.ETH-USD': require('./lib/exchanges/gdax/eth-usd'),
-	'gdax.BTC-USD': require('./lib/exchanges/gdax/btc-usd'),
-	'gdax.LTC-USD': require('./lib/exchanges/gdax/ltc-usd'),
-	'gdax.BCH-USD': require('./lib/exchanges/gdax/bch-usd'),
-	'bitmex.XBTUSD-BTC': require('./lib/exchanges/bitmex/xbt-usd')
+const e = {
+	ETH: './lib/wallets/ethereum',
+	BTC: './lib/wallets/bitcoin',
+	nicehash: './lib/wallets/nicehash',
+	'gdax.ETH-USD': './lib/exchanges/gdax/eth-usd',
+	'gdax.BTC-USD': './lib/exchanges/gdax/btc-usd',
+	'gdax.LTC-USD': './lib/exchanges/gdax/ltc-usd',
+	'gdax.BCH-USD': './lib/exchanges/gdax/bch-usd',
+	'bitmex.XBTUSD-BTC': './lib/exchanges/bitmex/xbt-usd'
 }[args.exchange];
 
-const command = {
-	buy: buy,
-	sell: sell,
-	bid: bid,
-	ask: ask,
-	cancel: cancel,
-	balance: balance,
-	deposit: deposit,
-	withdraw: withdraw,
-	depositAddress: depositAddress,
-	autoLong: autoLong,
-	autoShort: autoShort,
-	openOrders: openOrders,
-	closedOrders: closedOrders,
-	cancelOrder: cancelOrder 
-}[args.command];
-
-if (command) {
-	try {
-		command();
-	} catch (e) {
-		console.log('here');
-	}
-} else {
-	usage();
+if (!e) {
+	console.log('Exchange Not Found');
+	process.exit();
 }
 
-async function buy() {
-	const response = await exchange.buy(args.amount, args.price);
+const exchange = require(e);
+const command = exchange[args.command];
 
-	console.log(response);
-}
+run();
 
-async function sell() {
-	const response = await exchange.sell(args.amount, args.price);
-
-	console.log(response);
-}
-
-async function stopMarket() {
-	const response = await exchange.stopMarket(args.amount, args.price);
-
-	console.log(response);
-}
-
-async function cancel() {
-	const response = await exchange.cancelAllOrders();
-
-	console.log(response);
-}
-
-async function bid() {
-	const bid = await exchange.bid();
-
-	console.log(bid);
-}
-
-async function ask() {
-	const ask = await exchange.ask();
-
-	console.log(ask);
-}
-
-async function balance() {
-	if (exchange.name.includes('Wallet')) {
-		const balance = await exchange.walletBalance();
-
-		return console.log({ [exchange.symbol]: balance });
+async function run() {
+	if (!command) {
+		return usage();
 	}
 
-	const buyBalance = await exchange.buyBalance();
-	const sellBalance = await exchange.sellBalance();
+	const result = await exchange[args.command](args);
 
-	return console.log({
-		[exchange.tradingPair[0]]: sellBalance,
-		[exchange.tradingPair[1]]: buyBalance
-	});
-}
-
-async function deposit() {
-	const response = await exchange.deposit(args.amount);
-
-	console.log(response);
-}
-
-async function withdraw() {
-	const response = await exchange.withdraw(args.amount, args.address);
-
-	console.log(response);
-}
-
-async function depositAddress() {
-	const response = await exchange.depositAddress();
-
-	console.log(response);
-}
-
-async function autoLong() {
-	const response = await exchange.autoLong(args.price, args.amount, args.risk, args.reward);
-
-	console.log(response);
-}
-
-async function autoShort() {
-	const response = await exchange.autoShort(args.price, args.amount, args.risk, args.reward);
-
-	console.log(response);
-}
-
-async function openOrders() {
-	const response = await exchange.openOrders();
-
-	const os = response.map(o =>
-		Object.assign(_.pick(o, [
-			'id',
-			'side',
-			'type',
-			'price',
-			'symbol',
-			'status',
-			'amount',
-			'info.stopPx',
-			'info.execInst',
-			'info.pegOffsetValue',
-			'info.clOrdLinkID',
-		]), { time: moment(o.timestamp).fromNow() })
-	);
-
-	console.log(JSON.stringify(_.groupBy(os, 'info.clOrdLinkID'), null, 2));
-}
-
-async function closedOrders() {
-	const response = await exchange.closedOrders();
-
-	const os = response.map(o =>
-		Object.assign(_.pick(o, [
-			'id',
-			'side',
-			'type',
-			'price',
-			'symbol',
-			'status',
-			'filled',
-			'amount',
-			'info.stopPx',
-			'info.execInst',
-			'info.pegOffsetValue',
-			'info.clOrdLinkID',
-		]), { time: moment(o.timestamp).fromNow() })
-	);
-
-	console.log(JSON.stringify(_.groupBy(os, 'info.clOrdLinkID'), null, 2));
-}
-
-async function cancelOrder() {
-	const response = await exchange.cancelOrder(args.order)
+	if (result) {
+		console.log(result);
+	}
 }
 
 function usage() {
