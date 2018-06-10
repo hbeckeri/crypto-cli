@@ -4,6 +4,7 @@ require('dotenv').config({ path: __dirname + '/.env' });
 
 const commandLineArgs = require('command-line-args');
 const getUsage = require('command-line-usage');
+const fs = require('fs');
 
 const schema = [
 	{ name: 'command', defaultOption: true },
@@ -147,6 +148,8 @@ const args = commandLineArgs(schema);
 if (args.help === null) {
 	usage();
 }
+
+const lastExchange = fs.readFileSync(__dirname + '/lastExchange.txt');
 const e = {
 	ETH: './lib/wallets/ethereum',
 	BTC: './lib/wallets/bitcoin',
@@ -156,7 +159,7 @@ const e = {
 	'gdax.LTC-USD': './lib/exchanges/gdax/ltc-usd',
 	'gdax.BCH-USD': './lib/exchanges/gdax/bch-usd',
 	'bitmex.XBTUSD-BTC': './lib/exchanges/bitmex/xbt-usd'
-}[args.exchange];
+}[args.exchange || lastExchange];
 
 if (!e) {
 	console.log('Exchange Not Found');
@@ -165,6 +168,8 @@ if (!e) {
 
 const exchange = require(e);
 const command = exchange[args.command];
+
+fs.writeFileSync(__dirname + '/lastExchange.txt', args.exchange, { flag: 'w' });
 
 run();
 
