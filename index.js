@@ -9,7 +9,7 @@ const fs = require('fs');
 const schema = [
 	{ name: 'command', defaultOption: true },
 	{ name: 'price', alias: 'p', type: String },
-	{ name: 'exchange', alias: 'e', type: String, defaultValue: 'gdax.BTC-USD' },
+	{ name: 'exchange', alias: 'e', type: String },
 	{ name: 'amount', alias: 'a', type: String },
 	{ name: 'address', type: String },
 	{ name: 'order', type: String },
@@ -169,7 +169,7 @@ if (!e) {
 const exchange = require(e);
 const command = exchange[args.command];
 
-fs.writeFileSync(__dirname + '/lastExchange.txt', args.exchange, { flag: 'w' });
+fs.writeFileSync(__dirname + '/lastExchange.txt', args.exchange || lastExchange, { flag: 'w' });
 
 run();
 
