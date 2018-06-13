@@ -32,6 +32,22 @@ const usageSchema = [
 		header: 'Commands',
 		content: [
 			{
+				name: '[bold]{balance}',
+				label: 'See your current balance'
+			},
+			{
+				name: '[bold]{deposit}',
+				label: 'Deposit funds'
+			},
+			{
+				name: '[bold]{withdraw}',
+				label: 'Withdraw funds'
+			},
+			{
+				name: '[bold]{address}',
+				label: 'Get a deposit address'
+			},
+			{
 				name: '[bold]{buy}',
 				label: 'Place a buy order'
 			},
@@ -48,8 +64,12 @@ const usageSchema = [
 				label: 'See the current ask price'
 			},
 			{
+				name: '[bold]{cancelOrder}',
+				label: 'Cancel an open order'
+			},
+			{
 				name: '[bold]{cancel}',
-				label: 'Cancel all open bids'
+				label: 'Cancel all open orders'
 			},
 			{
 				name: '[bold]{openOrders}',
@@ -58,26 +78,6 @@ const usageSchema = [
 			{
 				name: '[bold]{closedOrders}',
 				label: 'Fetch closed orders'
-			},
-			{
-				name: '[bold]{cancelOrders}',
-				label: 'Cancel an order'
-			},
-			{
-				name: '[bold]{balance}',
-				label: 'See your current balance'
-			},
-			{
-				name: '[bold]{deposit}',
-				label: 'Deposit funds'
-			},
-			{
-				name: '[bold]{withdraw}',
-				label: 'Withdraw funds'
-			},
-			{
-				name: '[bold]{depositAddress}',
-				label: 'Get a deposit address'
 			},
 			{
 				name: '[bold]{autoLong}',
@@ -101,19 +101,19 @@ const usageSchema = [
 		header: 'Options',
 		optionList: [
 			{
-				name: 'price',
-				typeLabel: '[underline]{price}',
-				description: 'The price to buy/sell at. Defaults to the current market bid/ask.'
-			},
-			{
 				name: 'exchange',
 				typeLabel: '[underline]{exchange}',
 				description: 'The exchange to use.'
 			},
 			{
+				name: 'price',
+				typeLabel: '[underline]{price}',
+				description: 'The price to buy/sell at. Defaults to the current market bid/ask.'
+			},
+			{
 				name: 'amount',
 				typeLabel: '[underline]{amount}',
-				description: 'The amount to buy/sell.'
+				description: 'The amount to buy/sell. Defaults to full balance.'
 			},
 			{
 				name: 'risk',
@@ -128,7 +128,7 @@ const usageSchema = [
 			{
 				name: 'address',
 				typeLabel: '[underline]{address}',
-				description: 'The address to deposit to'
+				description: 'The address to withdraw to'
 			},
 			{
 				name: 'order',
