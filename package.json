@@ -18,11 +18,15 @@
     "command-line-usage": "4.1.0",
     "dotenv": "5.0.0",
     "ethers": "3.0.19",
+    "ethjs-unit": "0.1.6",
     "gdax": "0.5.1",
     "moment": "2.22.1",
     "nicehash": "1.0.2",
     "prompt-async": "0.9.9",
     "solc": "0.4.24",
+    "truffle-contract": "3.0.5",
+    "truffle-hdwallet-provider": "0.0.5",
+    "truffle-provider": "0.0.4",
     "uuid": "3.2.1"
   }
 }

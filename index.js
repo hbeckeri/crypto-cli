@@ -5,6 +5,7 @@ require('dotenv').config({ path: __dirname + '/.env' });
 const commandLineArgs = require('command-line-args');
 const getUsage = require('command-line-usage');
 const fs = require('fs');
+const ethUnit = require('ethjs-unit');
 
 const schema = [
 	{ name: 'command', defaultOption: true },
@@ -20,7 +21,7 @@ const schema = [
 	{ name: 'abi', type: String },
 	{ name: 'bytecode', type: String },
 	{ name: 'gasLimit', type: Number, defaultValue: 5000000 },
-	{ name: 'gasPrice', type: Number, defaultValue: 1000000000 }
+	{ name: 'gasPrice', type: Number, defaultValue: 1 }
 ];
 
 const usageSchema = [
@@ -144,6 +145,7 @@ const usageSchema = [
 ];
 
 const args = commandLineArgs(schema);
+args.gasPrice = ethUnit.toWei(args.gasPrice, 'gwei').toString();
 
 if (args.help === null) {
 	usage();
@@ -152,6 +154,7 @@ if (args.help === null) {
 const lastExchange = fs.readFileSync(__dirname + '/lastExchange.txt');
 const e = {
 	ETH: './lib/wallets/ethereum',
+	SCHB: './lib/wallets/ethereum/schrute-bucks',
 	BTC: './lib/wallets/bitcoin',
 	nicehash: './lib/wallets/nicehash',
 	'gdax.ETH-USD': './lib/exchanges/gdax/eth-usd',
@@ -178,11 +181,16 @@ async function run() {
 		return usage();
 	}
 
-	const result = await exchange[args.command](args);
-
-	if (result) {
-		console.log(result);
+	try {
+		const result = await exchange[args.command](args);
+		if (result) {
+			console.log(result);
+		}
+	} catch (e) {
+		console.log(e);
 	}
+
+	process.exit();
 }
 
 function usage() {
