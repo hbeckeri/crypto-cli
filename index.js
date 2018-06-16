@@ -154,7 +154,10 @@ if (args.help === null) {
 const lastExchange = fs.readFileSync(__dirname + '/lastExchange.txt');
 const e = {
 	ETH: './lib/wallets/ethereum',
-	SCHB: './lib/wallets/ethereum/schrute-bucks',
+	SCHB: './lib/wallets/ethereum/erc20/schrute-bucks',
+	NOBS: './lib/wallets/ethereum/erc20/nobs',
+	'0x': './lib/wallets/ethereum/erc20/0x',
+	DAI: './lib/wallets/ethereum/erc20/dai',
 	BTC: './lib/wallets/bitcoin',
 	nicehash: './lib/wallets/nicehash',
 	'gdax.ETH-USD': './lib/exchanges/gdax/eth-usd',
