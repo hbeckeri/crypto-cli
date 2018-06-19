@@ -153,13 +153,13 @@ if (args.help === null) {
 
 const lastExchange = fs.readFileSync(__dirname + '/lastExchange.txt');
 const e = {
-	ETH: './lib/wallets/ethereum',
-	SCHB: './lib/wallets/ethereum/erc20/schrute-bucks',
-	NOBS: './lib/wallets/ethereum/erc20/nobs',
-	'0x': './lib/wallets/ethereum/erc20/0x',
-	DAI: './lib/wallets/ethereum/erc20/dai',
-	BTC: './lib/wallets/bitcoin',
-	nicehash: './lib/wallets/nicehash',
+	ETH: './lib/wallets/EthereumWallet',
+	SCHB: './lib/wallets/ERC20/SchruteBucksWallet',
+	NOBS: './lib/wallets/ERC20/NOBSWallet',
+	ZRX: './lib/wallets/ERC20/ZRXWallet',
+	DAI: './lib/wallets/ERC20/DAIWallet',
+	BTC: './lib/wallets/BitcoinWallet',
+	nicehash: './lib/wallets/NicehashWallet',
 	'gdax.ETH-USD': './lib/exchanges/gdax/eth-usd',
 	'gdax.BTC-USD': './lib/exchanges/gdax/btc-usd',
 	'gdax.LTC-USD': './lib/exchanges/gdax/ltc-usd',
@@ -186,6 +186,7 @@ async function run() {
 
 	try {
 		const result = await exchange[args.command](args);
+
 		if (result) {
 			console.log(result);
 		}

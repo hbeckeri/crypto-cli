@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./index.js"
+    "start": "./index.js",
+    "precommit": "lint-staged"
   },
   "author": "",
   "license": "ISC",
@@ -28,5 +29,12 @@
     "truffle-hdwallet-provider": "0.0.5",
     "truffle-provider": "0.0.4",
     "uuid": "3.2.1"
+  },
+  "devDependencies": {
+    "husky": "0.14.3",
+    "lint-staged": "7.2.0"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   }
 }
