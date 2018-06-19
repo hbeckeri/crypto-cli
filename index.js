@@ -20,7 +20,7 @@ const schema = [
 	{ name: 'contract', type: String },
 	{ name: 'abi', type: String },
 	{ name: 'bytecode', type: String },
-	{ name: 'gasLimit', type: Number, defaultValue: 5000000 },
+	{ name: 'gasLimit', type: Number, defaultValue: 5 },
 	{ name: 'gasPrice', type: Number, defaultValue: 1 }
 ];
 
@@ -41,8 +41,8 @@ const usageSchema = [
 				label: 'Deposit funds'
 			},
 			{
-				name: '[bold]{withdraw}',
-				label: 'Withdraw funds'
+				name: '[bold]{send}',
+				label: 'Send funds to an address'
 			},
 			{
 				name: '[bold]{address}',
@@ -117,16 +117,6 @@ const usageSchema = [
 				description: 'The amount to buy/sell. Defaults to full balance.'
 			},
 			{
-				name: 'risk',
-				typeLabel: '[underline]{risk}',
-				description: 'The percent risk to take in an auto long/short'
-			},
-			{
-				name: 'reward',
-				typeLabel: '[underline]{reward}',
-				description: 'The percent reward to take in an auto long/short.'
-			},
-			{
 				name: 'address',
 				typeLabel: '[underline]{address}',
 				description: 'The address to withdraw to'
@@ -135,6 +125,41 @@ const usageSchema = [
 				name: 'order',
 				typeLabel: '[underline]{order}',
 				description: 'The id of the order'
+			},
+			{
+				name: 'contract',
+				typeLabel: '[underline]{contract}',
+				description: 'The path to a solidity smart contract'
+			},
+			{
+				name: 'abi',
+				typeLabel: '[underline]{abi}',
+				description: 'The path to a compiled solidity abi'
+			},
+			{
+				name: 'bytecode',
+				typeLabel: '[underline]{bytecode}',
+				description: 'The path to a compiled solidity bytecode'
+			},
+			{
+				name: 'gasPrice',
+				typeLabel: '[underline]{gasPrice}',
+				description: 'The price, in gwei, for an ethereum transaction'
+			},
+			{
+				name: 'gasLimit',
+				typeLabel: '[underline]{gasLimit}',
+				description: 'The limit, in gwei, for an ethereum transaction'
+			},
+			{
+				name: 'risk',
+				typeLabel: '[underline]{risk}',
+				description: 'The percent risk to take in an auto long/short'
+			},
+			{
+				name: 'reward',
+				typeLabel: '[underline]{reward}',
+				description: 'The percent reward to take in an auto long/short.'
 			},
 			{
 				name: 'help',
@@ -146,6 +171,7 @@ const usageSchema = [
 
 const args = commandLineArgs(schema);
 args.gasPrice = ethUnit.toWei(args.gasPrice, 'gwei').toString();
+args.gasLimit = ethUnit.toWei(args.gasLimit, 'mwei').toString();
 
 if (args.help === null) {
 	usage();
