@@ -190,7 +190,9 @@ const e = {
 	'gdax.BTC-USD': './lib/exchanges/gdax/btc-usd',
 	'gdax.LTC-USD': './lib/exchanges/gdax/ltc-usd',
 	'gdax.BCH-USD': './lib/exchanges/gdax/bch-usd',
-	'bitmex.XBTUSD-BTC': './lib/exchanges/bitmex/xbt-usd'
+	'bitmex.XBTUSD-BTC': './lib/exchanges/bitmex/xbt-usd',
+	'binance.BTC-ZRX': './lib/exchanges/binance/btc-zrx',
+	'binance.BTC-USDT': './lib/exchanges/binance/btc-usdt'
 }[args.exchange || lastExchange];
 
 if (!e) {
