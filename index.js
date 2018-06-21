@@ -4,12 +4,12 @@ require('dotenv').config({ path: __dirname + '/.env' });
 
 const commandLineArgs = require('command-line-args');
 const getUsage = require('command-line-usage');
-const fs = require('fs');
-const ethUnit = require('ethjs-unit');
 
 const schema = [
 	{ name: 'command', defaultOption: true },
 	{ name: 'price', alias: 'p', type: String },
+	{ name: 'wallet', alias: 'w', type: String },
+	{ name: 'symbol', alias: 's', type: String },
 	{ name: 'exchange', alias: 'e', type: String },
 	{ name: 'amount', alias: 'a', type: String },
 	{ name: 'address', type: String },
@@ -169,41 +169,49 @@ const usageSchema = [
 	}
 ];
 
-const args = commandLineArgs(schema);
-args.gasPrice = ethUnit.toWei(args.gasPrice, 'gwei').toString();
-args.gasLimit = ethUnit.toWei(args.gasLimit, 'mwei').toString();
+let args = commandLineArgs(schema);
 
 if (args.help === null) {
 	usage();
 }
 
-const lastExchange = fs.readFileSync(__dirname + '/lastExchange.txt');
 const e = {
-	ETH: './lib/wallets/EthereumWallet',
-	SCHB: './lib/wallets/ERC20/SchruteBucksWallet',
-	NOBS: './lib/wallets/ERC20/NOBSWallet',
-	ZRX: './lib/wallets/ERC20/ZRXWallet',
-	DAI: './lib/wallets/ERC20/DAIWallet',
 	BTC: './lib/wallets/BitcoinWallet',
+	DAI: './lib/wallets/DAIWallet',
+	ETH: './lib/wallets/EthereumWallet',
+	NOBS: './lib/wallets/NOBSWallet',
+	SCHB: './lib/wallets/SCHBWallet',
+	ZRX: './lib/wallets/ZRXWallet',
 	nicehash: './lib/wallets/NicehashWallet',
-	'gdax.ETH-USD': './lib/exchanges/gdax/eth-usd',
-	'gdax.BTC-USD': './lib/exchanges/gdax/btc-usd',
-	'gdax.LTC-USD': './lib/exchanges/gdax/ltc-usd',
-	'gdax.BCH-USD': './lib/exchanges/gdax/bch-usd',
-	'bitmex.XBTUSD-BTC': './lib/exchanges/bitmex/xbt-usd',
-	'binance.BTC-ZRX': './lib/exchanges/binance/btc-zrx',
-	'binance.BTC-USDT': './lib/exchanges/binance/btc-usdt'
-}[args.exchange || lastExchange];
+	gdax: './lib/wallets/GdaxWallet',
+	binance: './lib/wallets/BinanceWallet',
+	bitmex: './lib/wallets/BitmexWallet'
+}[args.wallet];
 
 if (!e) {
 	console.log('Exchange Not Found');
 	process.exit();
 }
 
-const exchange = require(e);
-const command = exchange[args.command];
+const _Wallet = require(e);
+class Wallet extends _Wallet {
+	static get symbol() {
+		try {
+			const symbol = super.symbol;
 
-fs.writeFileSync(__dirname + '/lastExchange.txt', args.exchange || lastExchange, { flag: 'w' });
+			return symbol;
+		} catch (e) {
+			return args.symbol || args.wallet;
+		}
+	}
+
+	static get exchangeSymbol() {
+		return args.exchange;
+	}
+}
+
+args = Wallet.parseArgs(args);
+const command = Wallet[args.command];
 
 run();
 
@@ -213,7 +221,7 @@ async function run() {
 	}
 
 	try {
-		const result = await exchange[args.command](args);
+		const result = await Wallet[args.command](args);
 
 		if (result) {
 			console.log(result);
