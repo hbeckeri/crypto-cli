@@ -185,7 +185,8 @@ const e = {
 	nicehash: './lib/wallets/NicehashWallet',
 	gdax: './lib/wallets/GdaxWallet',
 	binance: './lib/wallets/BinanceWallet',
-	bitmex: './lib/wallets/BitmexWallet'
+	bitmex: './lib/wallets/BitmexWallet',
+	hitbtc: './lib/wallets/HitBTCWallet'
 }[args.wallet];
 
 if (!e) {
