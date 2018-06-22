@@ -182,6 +182,7 @@ const e = {
 	NOBS: './lib/wallets/NOBSWallet',
 	SCHB: './lib/wallets/SCHBWallet',
 	ZRX: './lib/wallets/ZRXWallet',
+	coinbase: './lib/wallets/CoinbaseWallet',
 	nicehash: './lib/wallets/NicehashWallet',
 	gdax: './lib/wallets/GdaxWallet',
 	binance: './lib/wallets/BinanceWallet',

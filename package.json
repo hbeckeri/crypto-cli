@@ -11,23 +11,24 @@
   "license": "ISC",
   "dependencies": {
     "axios": "0.18.0",
-    "bignumber.js": "6.0.0",
+    "bignumber.js": "7.2.1",
     "bitcore-lib": "0.15.0",
     "bitcore-mnemonic": "1.5.0",
-    "ccxt": "1.14.32",
+    "ccxt": "1.14.249",
     "command-line-args": "5.0.2",
-    "command-line-usage": "4.1.0",
-    "dotenv": "5.0.0",
-    "ethers": "3.0.19",
+    "command-line-usage": "5.0.5",
+    "dotenv": "6.0.0",
+    "ethers": "3.0.24",
     "ethjs-unit": "0.1.6",
-    "gdax": "0.5.1",
-    "moment": "2.22.1",
+    "gdax": "0.8.0",
+    "lodash": "4.17.10",
+    "moment": "2.22.2",
     "nicehash": "1.0.2",
     "prompt-async": "0.9.9",
     "solc": "0.4.24",
-    "truffle-contract": "3.0.5",
+    "truffle-contract": "3.0.6",
     "truffle-hdwallet-provider": "0.0.5",
-    "truffle-provider": "0.0.4",
+    "truffle-provider": "0.0.5",
     "uuid": "3.2.1"
   },
   "devDependencies": {
@@ -35,6 +36,9 @@
     "lint-staged": "7.2.0"
   },
   "lint-staged": {
-    "*.{js,md}": ["prettier --write", "git add"]
+    "*.{js,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
