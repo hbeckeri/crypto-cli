@@ -50,6 +50,10 @@ const usageSchema = [
 				label: 'Get a deposit address'
 			},
 			{
+				name: '{bold transactions}',
+				label: 'Get a list of transactions'
+			},
+			{
 				name: '{bold compile}',
 				label: 'Compile an ethereum smart contract (Ethereum Only)'
 			},
@@ -62,6 +66,10 @@ const usageSchema = [
 	{
 		header: 'Exchange Commands',
 		content: [
+			{
+				name: '{bold tradingPairs}',
+				label: 'List the trading pairs for an exchange'
+			},
 			{
 				name: '{bold buy}',
 				label: 'Place a buy order'
@@ -212,6 +220,7 @@ const e = {
 	binance: './lib/wallets/BinanceWallet',
 	bitmex: './lib/wallets/BitmexWallet',
 	coinbase: './lib/wallets/CoinbaseWallet',
+	coinbasepro: './lib/wallets/CoinbaseProWallet',
 	gdax: './lib/wallets/GdaxWallet',
 	hitbtc: './lib/wallets/HitBTCWallet',
 	nicehash: './lib/wallets/NicehashWallet'
