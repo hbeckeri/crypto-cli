@@ -15,7 +15,7 @@ const schema = [
 	{ name: 'price', alias: 'p', type: String },
 	{ name: 'wallet', alias: 'w', type: String, defaultValue: persistantArgs.wallet },
 	{ name: 'symbol', alias: 's', type: String, defaultValue: persistantArgs.symbol },
-	{ name: 'exchange', alias: 'e', type: String, defaultValue: persistantArgs.symbol },
+	{ name: 'exchange', alias: 'e', type: String },
 	{ name: 'amount', alias: 'a', type: String },
 	{ name: 'address', type: String },
 	{ name: 'order', type: String },
