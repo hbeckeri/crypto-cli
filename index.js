@@ -4,13 +4,18 @@ require('dotenv').config({ path: __dirname + '/.env' });
 
 const commandLineArgs = require('command-line-args');
 const getUsage = require('command-line-usage');
+const fs = require('fs');
+
+const persistantArgs = JSON.parse(
+	fs.readFileSync(__dirname + '/args.json', { flag: 'a+' }).toString() || '{}'
+);
 
 const schema = [
 	{ name: 'command', defaultOption: true },
 	{ name: 'price', alias: 'p', type: String },
-	{ name: 'wallet', alias: 'w', type: String },
-	{ name: 'symbol', alias: 's', type: String },
-	{ name: 'exchange', alias: 'e', type: String },
+	{ name: 'wallet', alias: 'w', type: String, defaultValue: persistantArgs.wallet },
+	{ name: 'symbol', alias: 's', type: String, defaultValue: persistantArgs.symbol },
+	{ name: 'exchange', alias: 'e', type: String, defaultValue: persistantArgs.symbol },
 	{ name: 'amount', alias: 'a', type: String },
 	{ name: 'address', type: String },
 	{ name: 'order', type: String },
@@ -182,13 +187,15 @@ const e = {
 	NOBS: './lib/wallets/NOBSWallet',
 	SCHB: './lib/wallets/SCHBWallet',
 	ZRX: './lib/wallets/ZRXWallet',
-	coinbase: './lib/wallets/CoinbaseWallet',
-	nicehash: './lib/wallets/NicehashWallet',
-	gdax: './lib/wallets/GdaxWallet',
 	binance: './lib/wallets/BinanceWallet',
 	bitmex: './lib/wallets/BitmexWallet',
-	hitbtc: './lib/wallets/HitBTCWallet'
+	coinbase: './lib/wallets/CoinbaseWallet',
+	gdax: './lib/wallets/GdaxWallet',
+	hitbtc: './lib/wallets/HitBTCWallet',
+	nicehash: './lib/wallets/NicehashWallet'
 }[args.wallet];
+
+fs.writeFileSync(__dirname + '/args.json', JSON.stringify(args));
 
 if (!e) {
 	console.log('Exchange Not Found');

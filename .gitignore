@@ -1,4 +1,4 @@
 .env
 node_modules
 *.swp
-lastExchange.txt
+args.json
