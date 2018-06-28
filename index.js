@@ -223,7 +223,8 @@ const e = {
 	coinbasepro: './lib/wallets/CoinbaseProWallet',
 	gdax: './lib/wallets/GdaxWallet',
 	hitbtc: './lib/wallets/HitBTCWallet',
-	nicehash: './lib/wallets/NicehashWallet'
+	nicehash: './lib/wallets/NicehashWallet',
+	bancor: './lib/wallets/BancorWallet'
 }[args.wallet];
 
 fs.writeFileSync(__dirname + '/args.json', JSON.stringify(args));
