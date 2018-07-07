@@ -22,7 +22,7 @@ const schema = [
 	{ name: 'risk', type: String, defaultValue: 0.05 },
 	{ name: 'reward', type: String, defaultValue: 0.4 },
 	{ name: 'help', alias: 'h', type: String },
-	{ name: 'contract', type: String },
+	{ name: 'contract', alias: 'c', type: String, defaultValue: persistantArgs.contract },
 	{ name: 'abi', type: String },
 	{ name: 'bytecode', type: String },
 	{ name: 'gasLimit', type: Number, defaultValue: 5 },
@@ -248,6 +248,10 @@ class Wallet extends _Wallet {
 
 	static get exchangeSymbol() {
 		return args.exchange;
+	}
+
+	static get contractSymbol() {
+		return args.contract;
 	}
 }
 
