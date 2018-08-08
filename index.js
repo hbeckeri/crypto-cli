@@ -50,6 +50,10 @@ const usageSchema = [
 				label: 'Get a deposit address'
 			},
 			{
+				name: '{bold seed}',
+				label: 'Generate a seed phrase'
+			},
+			{
 				name: '{bold transactions}',
 				label: 'Get a list of transactions'
 			},
