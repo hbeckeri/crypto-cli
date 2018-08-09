@@ -106,12 +106,12 @@ const usageSchema = [
 			{
 				name: '{bold long}',
 				label:
-					'Go long at --price closing at --target protected by a --stop. Position size determined by --risk % (Bitmex Only)'
+					'Long at --price closing at --target protected by a --stop. Position size determined by --risk % (Bitmex Only)'
 			},
 			{
 				name: '{bold short}',
 				label:
-					'Go short at --price closing at --target protected by a --stop. Position size determined by --risk % (Bitmex Only)'
+					'Short at --price closing at --target protected by a --stop. Position size determined by --risk % (Bitmex Only)'
 			}
 		]
 	},
