@@ -21,7 +21,7 @@ const schema = [
 	{ name: 'amount', alias: 'a', type: String },
 	{ name: 'address', type: String },
 	{ name: 'order', type: String },
-	{ name: 'risk', type: String, defaultValue: 0.03 },
+	{ name: 'risk', type: String, defaultValue: 0.03, defaultValue: persistantArgs.risk },
 	{ name: 'help', alias: 'h', type: String },
 	{ name: 'contract', alias: 'c', type: String, defaultValue: persistantArgs.contract },
 	{ name: 'abi', type: String },
@@ -104,12 +104,14 @@ const usageSchema = [
 				label: 'Fetch closed orders'
 			},
 			{
-				name: '{bold autoLong}',
-				label: 'Go long at a set price protected by stops (Bitmex Only)'
+				name: '{bold long}',
+				label:
+					'Go long at --price closing at --target protected by a --stop. Position size determined by --risk % (Bitmex Only)'
 			},
 			{
-				name: '{bold autoShort}',
-				label: 'Go short at a set price protected by stops (Bitmex Only)'
+				name: '{bold short}',
+				label:
+					'Go short at --price closing at --target protected by a --stop. Position size determined by --risk % (Bitmex Only)'
 			}
 		]
 	},
@@ -201,9 +203,14 @@ const usageSchema = [
 				description: 'The percent risk to take in an auto long/short'
 			},
 			{
-				name: 'reward',
-				typeLabel: '{underline reward}',
-				description: 'The percent reward to take in an auto long/short'
+				name: 'target',
+				typeLabel: '{underline target}',
+				description: 'Target price for a long/short'
+			},
+			{
+				name: 'stop',
+				typeLabel: '{underline stop}',
+				description: 'Stop price for a long/short'
 			}
 		]
 	}
