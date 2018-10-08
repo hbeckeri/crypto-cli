@@ -14,26 +14,26 @@
     "bignumber.js": "7.2.1",
     "bitcore-lib": "0.15.0",
     "bitcore-mnemonic": "1.5.0",
-    "ccxt": "1.14.254",
+    "ccxt": "1.17.372",
     "command-line-args": "5.0.2",
     "command-line-usage": "5.0.5",
     "dotenv": "6.0.0",
     "ethers": "3.0.24",
     "ethjs-unit": "0.1.6",
     "gdax": "0.8.0",
-    "lodash": "4.17.10",
+    "lodash": "4.17.11",
     "moment": "2.22.2",
     "nicehash": "1.0.2",
     "prompt-async": "0.9.9",
-    "solc": "0.4.24",
+    "solc": "0.4.25",
     "truffle-contract": "3.0.6",
-    "truffle-hdwallet-provider": "0.0.5",
-    "truffle-provider": "0.0.5",
-    "uuid": "3.2.1"
+    "truffle-hdwallet-provider": "0.0.6",
+    "truffle-provider": "0.0.6",
+    "uuid": "3.3.2"
   },
   "devDependencies": {
-    "husky": "0.14.3",
-    "lint-staged": "7.2.0"
+    "husky": "1.1.1",
+    "lint-staged": "7.3.0"
   },
   "lint-staged": {
     "*.{js,md}": [

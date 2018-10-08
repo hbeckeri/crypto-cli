@@ -27,7 +27,9 @@ const schema = [
 	{ name: 'abi', type: String },
 	{ name: 'bytecode', type: String },
 	{ name: 'gasLimit', type: Number, defaultValue: 5 },
-	{ name: 'gasPrice', type: Number, defaultValue: 1 }
+	{ name: 'gasPrice', type: Number, defaultValue: 1 },
+	{ name: 'fee', type: String },
+	{ name: 'twoFactor', type: Number }
 ];
 
 const usageSchema = [
